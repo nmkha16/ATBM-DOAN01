@@ -32,13 +32,10 @@ namespace ATBM_DOAN01
             comboBox2.SelectedIndex = 0;
             // add item to right combo box
             //-> add your function name here
-            comboBox1.Items.Add(new { Text = "Xem danh sách người dùng", Value = 0 });
+            comboBox1.Items.Add(new { Text = "Xem thông tin quyền", Value = "Priv_Info" });
             //
 
 
-
-            //set default select combo box
-            comboBox1.SelectedIndex = 0;
 
             // set variable 
             loginForm = login;
@@ -56,9 +53,23 @@ namespace ATBM_DOAN01
             loginForm.Show();
         }
 
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        /// <summary>
+        /// handle comboxbox selecting user or role
+        /// will print users or roles in pdb
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
-
+            if (comboBox2.SelectedIndex == 0)
+            {
+                getUserRole("select role from dba_roles where common = 'NO'");
+            }
+            else if (comboBox2.SelectedIndex == 1) // users
+            {
+                getUserRole("SELECT username FROM dba_users " +
+                    "where oracle_maintained = 'N' and username not like 'ADMIN%'");
+            }            
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -66,6 +77,48 @@ namespace ATBM_DOAN01
 
         }
 
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //throw new NotImplementedException();
+           
+        }
 
+
+        // method to handle select user/roles combobox
+        // populate list box
+        private void getUserRole(string query)
+        {
+            // clear the listbox first to prevent stacking item
+            listBox1.Items.Clear();
+
+            OracleCommand command = new OracleCommand(query, con);
+            OracleDataReader oraReader = command.ExecuteReader();
+
+            if (oraReader.HasRows)
+            {
+                while (oraReader.Read())
+                {
+                    listBox1.Items.Add(oraReader.GetString(0));
+                }
+            }
+            else
+            {
+                listBox1.Items.Clear();
+            }
+            oraReader.Close();
+        }
+
+
+        // handle list of user\role listbox
+        private void listBox1_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            // function is view privilege info
+            if (comboBox1.SelectedIndex == 0)
+            {
+
+            }
+        }
     }
+
+    
 }
