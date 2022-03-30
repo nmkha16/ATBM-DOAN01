@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Oracle.ManagedDataAccess.Client;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -12,9 +13,22 @@ namespace ATBM_DOAN01
 {
     public partial class Interface : Form
     {
-        public Interface()
+        private Login loginForm;
+        private OracleConnection con;
+        public Interface(Login login, OracleConnection con)
         {
             InitializeComponent();
+            loginForm = login;
+            this.con = con;
+            // add closing event
+            FormClosing += Interface_FormClosing;
+
+        }
+
+        // closing event on winform
+        private void Interface_FormClosing(object? sender, FormClosingEventArgs e)
+        {
+            loginForm.Show();
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -26,5 +40,7 @@ namespace ATBM_DOAN01
         {
 
         }
+
+
     }
 }
