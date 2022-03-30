@@ -15,26 +15,44 @@ namespace ATBM_DOAN01
     {
         private Login loginForm;
         private OracleConnection con;
+        private DataTable data; // for getting query result to datagridview
         public Interface(Login login, OracleConnection con)
         {
             InitializeComponent();
+            comboBox3.Hide();
+            // combobox for each privilege info
+            comboBox3.DisplayMember = "Text";
+            comboBox3.ValueMember = "Value";
+            
 
             // combobox for user/roles
             comboBox2.DisplayMember = "Text";
             comboBox2.ValueMember = "Value";
+
             //combobox for function
             comboBox1.DisplayMember = "Text";
             comboBox1.ValueMember = "Value";
             // add item to left combo box
             comboBox2.Items.Add(new { Text = "Roles", Value = "Roles" });
             comboBox2.Items.Add(new { Text = "Users", Value = "Users" });
+            
+            //call selected index changed to auto display list of users
+            comboBox2_SelectedIndexChanged(comboBox2, null);
+
             // set default selected combo box
             //comboBox2.SelectedIndex = 0;
             // add item to right combo box
             //-> add your function name here
             comboBox1.Items.Add(new { Text = "Xem thông tin quyền", Value = "Priv_Info" });
             //
-            comboBox1.Items.Add(new { Text = "Tạo mới user", Value = "Create_User" });
+
+            // add item for privilege info combobox
+            comboBox3.Items.Add(new { Text = "Xem quyền sys", Value = "sys_info" });//0
+            comboBox3.Items.Add(new { Text = "Xem quyền trên table", Value = "tab_info" });//1
+            comboBox3.Items.Add(new { Text = "Xem quyền trên cột", Value = "col_info" });//2
+            // set default index to comboBox3
+            comboBox3.SelectedIndex = 0;
+
 
 
             // set variable 
@@ -61,7 +79,7 @@ namespace ATBM_DOAN01
         /// <param name="e"></param>
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (comboBox2.SelectedIndex == 0) //roles
+            if (comboBox2.SelectedIndex == 0)
             {
                 getUserRole("select role from dba_roles where common = 'NO'");
             }
@@ -76,26 +94,25 @@ namespace ATBM_DOAN01
         {
 
         }
-        //select index change
+
+        //handle event for combo box selecting function
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             //throw new NotImplementedException();
-            // create new user
-           if(comboBox1.SelectedIndex == 1 && comboBox2.SelectedIndex==1)
+            if (comboBox1.SelectedIndex == 0)
             {
-                openAddNewUserForm(true);
+                comboBox3.Show();
             }
-           else if (comboBox1.SelectedIndex == 1 && comboBox2.SelectedIndex == 0)
+
+
+
+            // please add comboBox3.Hide() in other if conditions xD
+            else
             {
-                openAddNewUserForm(false);
+                comboBox3.Hide();
             }
         }
-        private void openAddNewUserForm(bool checkUser_Role)
-        {
-            this.Hide();
-            AddNewUserRole itf = new AddNewUserRole(this, con,checkUser_Role);
-            itf.Show();
-        }
+
 
         // method to handle select user/roles combobox
         // populate list box
@@ -106,6 +123,7 @@ namespace ATBM_DOAN01
 
             OracleCommand command = new OracleCommand(query, con);
             OracleDataReader oraReader = command.ExecuteReader();
+
             if (oraReader.HasRows)
             {
                 while (oraReader.Read())
@@ -126,10 +144,86 @@ namespace ATBM_DOAN01
         {
             // function is view privilege info
             if (comboBox1.SelectedIndex == 0)
-            {
+            {                
+                if (comboBox2.SelectedIndex== 1) // is selecting to view user
+                {
+                    // this is where we select each privs table according to end user selection on comboBox3
+                    if (comboBox3.SelectedIndex== 0) // view sys privs info
+                    {
+                        string query = "select privilege from dba_sys_privs " +
+                            "where grantee = upper('" + listBox1.SelectedItem.ToString() +"')";
+                        getUserRolePrivsInfo(query, true);
+                    }
+                    if (comboBox3.SelectedIndex== 1) // view table privs
+                    {
+                        string query = "select privilege, table_name, grantor, grantable from dba_tab_privs " +
+                            "where grantee = upper('" + listBox1.SelectedItem.ToString() + "')";
+                        getUserRolePrivsInfo(query, true);
+                    }
+                    if (comboBox3.SelectedIndex == 2) // view col privs
+                    {
+                        string query = "select privilege, table_name,column_name,grantor,grantable from dba_col_privs " +
+                            "where grantee = upper('" + listBox1.SelectedItem.ToString() + "')";
+                        getUserRolePrivsInfo(query, true);
+                    }
+                }
 
+                else if (comboBox2.SelectedIndex==0)// is selecting to view role
+                {
+                    // this is where we select each privs table according to end user selection on comboBox3
+                    if (comboBox3.SelectedIndex == 0) // view sys privs info
+                    {
+                        string query = "select privilege from dba_sys_privs " +
+                            "where grantee = upper('" + listBox1.SelectedItem.ToString() + "')";
+                        getUserRolePrivsInfo(query, true);
+                    }
+                    if (comboBox3.SelectedIndex == 1) // view table privs
+                    {
+                        string query = "select privilege, table_name, grantable from role_tab_privs " +
+                            "where role = upper('" + listBox1.SelectedItem.ToString() + "')";
+                        getUserRolePrivsInfo(query, true);
+                    }
+                    if (comboBox3.SelectedIndex == 2) // view col privs
+                    {
+                        string query = "select privilege, table_name,column_name,grantor from dba_col_privs " +
+                            "where grantee = upper('" + listBox1.SelectedItem.ToString() + "')";
+                        getUserRolePrivsInfo(query, true);
+                    }
+                }
             }
         }
+
+        //function to get privileges info from oracle
+        private void getUserRolePrivsInfo(string query, bool isGetUser)
+        {
+            // clear the table first
+            try
+            {
+                data.Clear();
+                dataGridView2.Refresh();    
+            }
+            catch
+            {
+                //do nothing honestly
+            }
+
+            // perform oracle select
+            try
+            {
+                OracleCommand command = new OracleCommand(query, con);
+                OracleDataReader oraReader = command.ExecuteReader();
+                // bind return select result to DataTable
+                data = new DataTable();
+                data.Load(oraReader);
+                // bind data to table aka datagridview
+                dataGridView2.DataSource = data;
+            }
+            catch
+            {
+                MessageBox.Show("Error getting result!", "Alert");
+            }
+        }
+
     }
 
     
