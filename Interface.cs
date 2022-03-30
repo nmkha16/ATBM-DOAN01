@@ -46,13 +46,15 @@ namespace ATBM_DOAN01
             comboBox1.Items.Add(new { Text = "Xem thông tin quyền", Value = "Priv_Info" });
             //
 
+            comboBox1.Items.Add(new { Text = "Tạo mới user", Value = "Create_User" });
+
+
             // add item for privilege info combobox
             comboBox3.Items.Add(new { Text = "Xem quyền sys", Value = "sys_info" });//0
             comboBox3.Items.Add(new { Text = "Xem quyền trên table", Value = "tab_info" });//1
             comboBox3.Items.Add(new { Text = "Xem quyền trên cột", Value = "col_info" });//2
             // set default index to comboBox3
             comboBox3.SelectedIndex = 0;
-
 
 
             // set variable 
@@ -79,7 +81,7 @@ namespace ATBM_DOAN01
         /// <param name="e"></param>
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (comboBox2.SelectedIndex == 0)
+            if (comboBox2.SelectedIndex == 0) //roles
             {
                 getUserRole("select role from dba_roles where common = 'NO'");
             }
@@ -95,10 +97,10 @@ namespace ATBM_DOAN01
 
         }
 
-        //handle event for combo box selecting function
+        //select index change
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //throw new NotImplementedException();
+             //throw new NotImplementedException();
             if (comboBox1.SelectedIndex == 0)
             {
                 comboBox3.Show();
@@ -107,12 +109,31 @@ namespace ATBM_DOAN01
 
 
             // please add comboBox3.Hide() in other if conditions xD
+            
+            //throw new NotImplementedException();
+            // create new user
+            
+           else if(comboBox1.SelectedIndex == 1 && comboBox2.SelectedIndex==1)
+            {
+                openAddNewUserForm(true);
+            }
+           else if (comboBox1.SelectedIndex == 1 && comboBox2.SelectedIndex == 0)
+            {
+                openAddNewUserForm(false);
+            }
             else
             {
                 comboBox3.Hide();
             }
         }
+        private void openAddNewUserForm(bool checkUser_Role)
+        {
+            this.Hide();
+            AddNewUserRole itf = new AddNewUserRole(this, con,checkUser_Role);
+            itf.Show();
 
+
+     
 
         // method to handle select user/roles combobox
         // populate list box
@@ -123,7 +144,6 @@ namespace ATBM_DOAN01
 
             OracleCommand command = new OracleCommand(query, con);
             OracleDataReader oraReader = command.ExecuteReader();
-
             if (oraReader.HasRows)
             {
                 while (oraReader.Read())
