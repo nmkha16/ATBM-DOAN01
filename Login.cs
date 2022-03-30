@@ -38,7 +38,7 @@ namespace ATBM_DOAN01
             try
             {
                 con.Open();
-                MessageBox.Show("Connection established (" + con.ServerVersion + ")", "Oracle Connection");
+                MessageBox.Show("Connection established (" + con.ServerVersion + ")", "Connection");
                 openInterface();
             }
             catch (Exception ex)
@@ -46,7 +46,7 @@ namespace ATBM_DOAN01
                 // show original oracle's error
                 //MessageBox.Show(ex.Message, "Oracle Connection");
                 this.Show();
-                MessageBox.Show("Invalid username or password", "Oracle Connection");
+                MessageBox.Show("Invalid username or password", "Connection");
 
             }
         }
