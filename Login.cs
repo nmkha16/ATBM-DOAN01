@@ -7,6 +7,17 @@ namespace ATBM_DOAN01
         public Login()
         {
             InitializeComponent();
+
+            //fast debug hack :))
+            textBox1.Text = "admin11";
+            textBox2.Text = "nhom11";
+
+            FormClosing += Login_FormClosing;
+        }
+
+        private void Login_FormClosing(object? sender, FormClosingEventArgs e)
+        {
+            System.Windows.Forms.Application.Exit();
         }
 
         // function for login
@@ -34,7 +45,9 @@ namespace ATBM_DOAN01
             {
                 // show original oracle's error
                 //MessageBox.Show(ex.Message, "Oracle Connection");
+                this.Show();
                 MessageBox.Show("Invalid username or password", "Oracle Connection");
+
             }
         }
 
