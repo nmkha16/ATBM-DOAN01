@@ -147,7 +147,7 @@ namespace ATBM_DOAN01
             {                
                 if (comboBox2.SelectedIndex== 1) // is selecting to view user
                 {
-                    // this is where we select each privs table acording to end user selection on comboBox3
+                    // this is where we select each privs table according to end user selection on comboBox3
                     if (comboBox3.SelectedIndex== 0) // view sys privs info
                     {
                         string query = "select privilege from dba_sys_privs " +
@@ -156,8 +156,31 @@ namespace ATBM_DOAN01
                     }
                     if (comboBox3.SelectedIndex== 1) // view table privs
                     {
-                        string query = "select privilege, table_name, grantor from dba_tab_privs " +
+                        string query = "select privilege, table_name, grantor, grantable from dba_tab_privs " +
                             "where grantee = upper('" + listBox1.SelectedItem.ToString() + "')";
+                        getUserRolePrivsInfo(query, true);
+                    }
+                    if (comboBox3.SelectedIndex == 2) // view col privs
+                    {
+                        string query = "select privilege, table_name,column_name,grantor,grantable from dba_col_privs " +
+                            "where grantee = upper('" + listBox1.SelectedItem.ToString() + "')";
+                        getUserRolePrivsInfo(query, true);
+                    }
+                }
+
+                else if (comboBox2.SelectedIndex==0)// is selecting to view role
+                {
+                    // this is where we select each privs table according to end user selection on comboBox3
+                    if (comboBox3.SelectedIndex == 0) // view sys privs info
+                    {
+                        string query = "select privilege from dba_sys_privs " +
+                            "where grantee = upper('" + listBox1.SelectedItem.ToString() + "')";
+                        getUserRolePrivsInfo(query, true);
+                    }
+                    if (comboBox3.SelectedIndex == 1) // view table privs
+                    {
+                        string query = "select privilege, table_name, grantable from role_tab_privs " +
+                            "where role = upper('" + listBox1.SelectedItem.ToString() + "')";
                         getUserRolePrivsInfo(query, true);
                     }
                     if (comboBox3.SelectedIndex == 2) // view col privs
