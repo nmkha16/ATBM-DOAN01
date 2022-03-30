@@ -29,12 +29,12 @@ namespace ATBM_DOAN01
             comboBox2.Items.Add(new { Text = "Roles", Value = "Roles" });
             comboBox2.Items.Add(new { Text = "Users", Value = "Users" });
             // set default selected combo box
-            comboBox2.SelectedIndex = 0;
+            //comboBox2.SelectedIndex = 0;
             // add item to right combo box
             //-> add your function name here
             comboBox1.Items.Add(new { Text = "Xem thông tin quyền", Value = "Priv_Info" });
             //
-
+            comboBox1.Items.Add(new { Text = "Tạo mới user", Value = "Create_User" });
 
 
             // set variable 
@@ -61,7 +61,7 @@ namespace ATBM_DOAN01
         /// <param name="e"></param>
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (comboBox2.SelectedIndex == 0)
+            if (comboBox2.SelectedIndex == 0) //roles
             {
                 getUserRole("select role from dba_roles where common = 'NO'");
             }
@@ -76,13 +76,26 @@ namespace ATBM_DOAN01
         {
 
         }
-
+        //select index change
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             //throw new NotImplementedException();
-           
+            // create new user
+           if(comboBox1.SelectedIndex == 1 && comboBox2.SelectedIndex==1)
+            {
+                openAddNewUserForm(true);
+            }
+           else if (comboBox1.SelectedIndex == 1 && comboBox2.SelectedIndex == 0)
+            {
+                openAddNewUserForm(false);
+            }
         }
-
+        private void openAddNewUserForm(bool checkUser_Role)
+        {
+            this.Hide();
+            AddNewUserRole itf = new AddNewUserRole(this, con,checkUser_Role);
+            itf.Show();
+        }
 
         // method to handle select user/roles combobox
         // populate list box
@@ -93,7 +106,6 @@ namespace ATBM_DOAN01
 
             OracleCommand command = new OracleCommand(query, con);
             OracleDataReader oraReader = command.ExecuteReader();
-
             if (oraReader.HasRows)
             {
                 while (oraReader.Read())
