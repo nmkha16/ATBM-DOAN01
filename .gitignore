@@ -2,4 +2,4 @@
 /Debug
 *.cache
 bin/Debug
-obj/Debug
+obj
