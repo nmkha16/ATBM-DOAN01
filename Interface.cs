@@ -49,12 +49,13 @@ namespace ATBM_DOAN01
             comboBox1.Items.Add(new { Text = "Tạo mới User-Role", Value = "Create_User_Role" });//2
             comboBox1.Items.Add(new { Text = "Xoá object", Value = "Drop_Object" });//3
             comboBox1.Items.Add(new { Text = "Hiệu chỉnh role", Value = "Adjust_Role" });//4
-
+            comboBox1.Items.Add(new { Text = "Cấp phát quyền", Value = "Assign_privilege" });//5
 
             // add item for privilege info combobox
             comboBox3.Items.Add(new { Text = "Xem quyền sys", Value = "sys_info" });//0
             comboBox3.Items.Add(new { Text = "Xem quyền trên table", Value = "tab_info" });//1
             comboBox3.Items.Add(new { Text = "Xem quyền trên cột", Value = "col_info" });//2
+            comboBox3.Items.Add(new { Text = "Xem các role của user", Value = "user_granted_roles" });
             // set default index to comboBox3
             comboBox3.SelectedIndex = 0;
 
@@ -135,6 +136,8 @@ namespace ATBM_DOAN01
                 openAddNewUserForm(false);
             }
             
+            
+
 
             /*else
             {
@@ -199,6 +202,12 @@ namespace ATBM_DOAN01
                             "where grantee = upper('" + listBox1.SelectedItem.ToString() + "')";
                         getResultByQuery(query);
                     }
+                    if (comboBox3.SelectedIndex == 3) // view which roles granted to user
+                    {
+                        string query  = "select granted_role from dba_role_privs where grantee = upper('"+ 
+                            listBox1.SelectedItem.ToString() + "')";
+                        getResultByQuery(query);
+                    }    
                 }
 
                 else if (comboBox2.SelectedIndex == 0)// is selecting to view role
@@ -255,6 +264,27 @@ namespace ATBM_DOAN01
                 // for adjust role
                 AddNewUserRole adjustRole = new AddNewUserRole(this, con, listBox1.SelectedItem.ToString());
                 adjustRole.Show();
+            }
+
+            // granting privilege function
+            else if (comboBox1.SelectedIndex == 5)
+            {
+                
+                Hide();
+                // granting on role
+                if (comboBox2.SelectedIndex == 0)
+                {
+                    Assign assign = new Assign(this, con, listBox1.SelectedItem.ToString(), false);
+                    assign.Show();
+
+                }
+                // granting on user
+                else if (comboBox2.SelectedIndex == 1)
+                {
+                    Assign assign = new Assign(this, con, listBox1.SelectedItem.ToString(), true);
+                    assign.Show();
+
+                }
             }
         }
 
