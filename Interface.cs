@@ -25,7 +25,7 @@ namespace ATBM_DOAN01
             // combobox for each privilege info
             comboBox3.DisplayMember = "Text";
             comboBox3.ValueMember = "Value";
-            
+
 
             // combobox for user/roles
             comboBox2.DisplayMember = "Text";
@@ -44,9 +44,11 @@ namespace ATBM_DOAN01
             //comboBox2.SelectedIndex = 0;
             // add item to right combo box
             //-> add your function name here
-            comboBox1.Items.Add(new { Text = "Xem thông tin quyền", Value = "Priv_Info" });
-            comboBox1.Items.Add(new { Text = "Xem thông tin bảng", Value = "Tab_Info" });
-            comboBox1.Items.Add(new { Text = "Tạo mới User-Role", Value = "Create_User_Role" });
+            comboBox1.Items.Add(new { Text = "Xem thông tin quyền", Value = "Priv_Info" });//0
+            comboBox1.Items.Add(new { Text = "Xem thông tin bảng", Value = "Tab_Info" });//1
+            comboBox1.Items.Add(new { Text = "Tạo mới User-Role", Value = "Create_User_Role" });//2
+            comboBox1.Items.Add(new { Text = "Xoá object", Value = "Drop_Object" });//3
+            comboBox1.Items.Add(new { Text = "Hiệu chỉnh role", Value = "Adjust_Role" });//4
 
 
             // add item for privilege info combobox
@@ -108,7 +110,7 @@ namespace ATBM_DOAN01
         //select index change
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-             //throw new NotImplementedException();
+            //throw new NotImplementedException();
             if (comboBox1.SelectedIndex == 0)
             {
                 comboBox3.Show();
@@ -121,7 +123,7 @@ namespace ATBM_DOAN01
 
             //throw new NotImplementedException();
             // create new user
-            else if(comboBox1.SelectedIndex == 2 && comboBox2.SelectedIndex==1)
+            else if (comboBox1.SelectedIndex == 2 && comboBox2.SelectedIndex == 1)
             {
                 comboBox3.Hide();
                 openAddNewUserForm(true);
@@ -133,6 +135,7 @@ namespace ATBM_DOAN01
                 openAddNewUserForm(false);
             }
             
+
             /*else
             {
                 comboBox3.Hide();
@@ -174,17 +177,17 @@ namespace ATBM_DOAN01
         {
             // function is view privilege info
             if (comboBox1.SelectedIndex == 0)
-            {                
-                if (comboBox2.SelectedIndex== 1) // is selecting to view user
+            {
+                if (comboBox2.SelectedIndex == 1) // is selecting to view user
                 {
                     // this is where we select each privs table according to end user selection on comboBox3
-                    if (comboBox3.SelectedIndex== 0) // view sys privs info
+                    if (comboBox3.SelectedIndex == 0) // view sys privs info
                     {
                         string query = "select privilege from dba_sys_privs " +
-                            "where grantee = upper('" + listBox1.SelectedItem.ToString() +"')";
+                            "where grantee = upper('" + listBox1.SelectedItem.ToString() + "')";
                         getResultByQuery(query);
                     }
-                    if (comboBox3.SelectedIndex== 1) // view table privs
+                    if (comboBox3.SelectedIndex == 1) // view table privs
                     {
                         string query = "select privilege, table_name, grantor, grantable from dba_tab_privs " +
                             "where grantee = upper('" + listBox1.SelectedItem.ToString() + "')";
@@ -198,7 +201,7 @@ namespace ATBM_DOAN01
                     }
                 }
 
-                else if (comboBox2.SelectedIndex==0)// is selecting to view role
+                else if (comboBox2.SelectedIndex == 0)// is selecting to view role
                 {
                     // this is where we select each privs table according to end user selection on comboBox3
                     if (comboBox3.SelectedIndex == 0) // view sys privs info
@@ -227,6 +230,32 @@ namespace ATBM_DOAN01
             {
                 getResultByQuery("select * from " + listBox1.SelectedItem.ToString());
             }
+
+            // selecting drop object function in comboBox
+            else if (comboBox1.SelectedIndex == 3)
+            {
+                // droppping role
+                if (comboBox2.SelectedIndex == 0)
+                {
+                    dropSchema("drop role " + listBox1.SelectedItem.ToString());
+                }
+                //dropping user
+                else if (comboBox2.SelectedIndex == 1)
+                {
+                    dropSchema("drop user " + listBox1.SelectedItem.ToString());
+                }
+            }
+
+
+            // adjust role
+            else if (comboBox2.SelectedIndex == 0 && comboBox1.SelectedIndex== 4)
+            {
+                comboBox3.Hide();
+                this.Hide();
+                // for adjust role
+                AddNewUserRole adjustRole = new AddNewUserRole(this, con, listBox1.SelectedItem.ToString());
+                adjustRole.Show();
+            }
         }
 
         //function to get privileges info from oracle
@@ -236,7 +265,7 @@ namespace ATBM_DOAN01
             try
             {
                 data.Clear();
-                dataGridView2.Refresh();    
+                dataGridView2.Refresh();
             }
             catch
             {
@@ -260,7 +289,22 @@ namespace ATBM_DOAN01
             }
         }
 
-    }
 
-    
+        // function to drop user or role
+        private void dropSchema(string query)
+        {
+            
+            OracleCommand oracleCommand = new OracleCommand(query, con);
+            try
+            { 
+                oracleCommand.ExecuteNonQuery();
+                MessageBox.Show("Drop successfully!!!","Alert");
+                listBox1.Items.RemoveAt(listBox1.SelectedIndex);
+            }
+            catch
+            {
+                MessageBox.Show("Drop failed!!!", "Alert");
+            }
+        }
+    }
 }
