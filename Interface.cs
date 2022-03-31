@@ -129,11 +129,11 @@ namespace ATBM_DOAN01
         private void openAddNewUserForm(bool checkUser_Role)
         {
             this.Hide();
-            AddNewUserRole itf = new AddNewUserRole(this, con,checkUser_Role);
+            AddNewUserRole itf = new AddNewUserRole(this, con, checkUser_Role);
             itf.Show();
 
 
-     
+        }
 
         // method to handle select user/roles combobox
         // populate list box
