@@ -1,4 +1,5 @@
 using Oracle.ManagedDataAccess.Client;
+using static ATBM_DOAN01.Program;
 namespace ATBM_DOAN01
 {
     public partial class Login : Form
@@ -23,20 +24,31 @@ namespace ATBM_DOAN01
         // function for login
         private void login()
         {
+            //now we check special char in login
+            if (checkInput.hasSpecialCharacter(textBox1.Text))
+            {
+                MessageBox.Show("Only accept letters and numeric alphabet in user!!!");
+                return;
+            }
+
             // create connection
             con = new OracleConnection();
 
             // create connection string using builder
             OracleConnectionStringBuilder ocsb = new OracleConnectionStringBuilder();
 
+            
+
             ocsb.UserID = textBox1.Text;
-<<<<<<< Updated upstream
+            ocsb.Password = Hash.getHashSha256(textBox2.Text+textBox1.Text).Substring(0,30); // get 30 bytes since oracle password identifier
+                                                                             // only allows 30 bytes
+
             ocsb.Password = textBox2.Text;
-=======
+
             //ocsb.Password = textBox2.Text;
             ocsb.Password = Hash.getHashSha256(textBox2.Text+textBox1.Text).Substring(0,30); // get 30 bytes since oracle password identifier
             // only allows 30 bytes
->>>>>>> Stashed changes
+
             ocsb.DataSource = "localhost:1521/QuanLiS";
 
             // connect

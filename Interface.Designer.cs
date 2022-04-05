@@ -46,10 +46,9 @@
             this.dataGridView2.Name = "dataGridView2";
             this.dataGridView2.RowHeadersWidth = 51;
             this.dataGridView2.RowTemplate.Height = 25;
-            this.dataGridView2.Size = new System.Drawing.Size(828, 511);
+            this.dataGridView2.Size = new System.Drawing.Size(695, 511);
             this.dataGridView2.TabIndex = 1;
             this.dataGridView2.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView2_CellContentClick);
-            this.dataGridView2.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView2_CellEndEdit);
             // 
             // comboBox1
             // 
@@ -73,7 +72,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(949, 29);
+            this.button1.Location = new System.Drawing.Point(816, 29);
             this.button1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(86, 31);
@@ -96,7 +95,7 @@
             // comboBox3
             // 
             this.comboBox3.FormattingEnabled = true;
-            this.comboBox3.Location = new System.Drawing.Point(633, 29);
+            this.comboBox3.Location = new System.Drawing.Point(547, 29);
             this.comboBox3.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.comboBox3.Name = "comboBox3";
             this.comboBox3.Size = new System.Drawing.Size(169, 28);
@@ -106,7 +105,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1082, 589);
+            this.ClientSize = new System.Drawing.Size(929, 589);
             this.Controls.Add(this.comboBox3);
             this.Controls.Add(this.listBox1);
             this.Controls.Add(this.button1);
@@ -114,8 +113,8 @@
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.dataGridView2);
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.MaximumSize = new System.Drawing.Size(1100, 636);
-            this.MinimumSize = new System.Drawing.Size(1100, 636);
+            this.MaximumSize = new System.Drawing.Size(947, 636);
+            this.MinimumSize = new System.Drawing.Size(947, 636);
             this.Name = "Interface";
             this.Text = " ";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();

@@ -20,11 +20,13 @@ namespace ATBM_DOAN01
         public Interface(Login login, OracleConnection con)
         {
             InitializeComponent();
+            //stretch last columnn
+
             comboBox3.Hide();
             // combobox for each privilege info
             comboBox3.DisplayMember = "Text";
             comboBox3.ValueMember = "Value";
-            
+
 
             // combobox for user/roles
             comboBox2.DisplayMember = "Text";
@@ -36,24 +38,25 @@ namespace ATBM_DOAN01
             // add item to left combo box
             comboBox2.Items.Add(new { Text = "Roles", Value = "Roles" });
             comboBox2.Items.Add(new { Text = "Users", Value = "Users" });
-            
+            comboBox2.Items.Add(new { Text = "Tables", Value = "Tables" });
+            comboBox2.Items.Add(new { Text = "Views", Value = "Views" });
             //call selected index changed to auto display list of users
-            comboBox2_SelectedIndexChanged(comboBox2, null);
-
             // set default selected combo box
             //comboBox2.SelectedIndex = 0;
             // add item to right combo box
             //-> add your function name here
-            comboBox1.Items.Add(new { Text = "Xem thông tin quyền", Value = "Priv_Info" });
-            //
-
-            comboBox1.Items.Add(new { Text = "Tạo mới user", Value = "Create_User" });
-
+            comboBox1.Items.Add(new { Text = "Xem thông tin quyền", Value = "Priv_Info" });//0
+            comboBox1.Items.Add(new { Text = "Xem thông tin bảng", Value = "Tab_Info" });//1
+            comboBox1.Items.Add(new { Text = "Tạo mới User-Role", Value = "Create_User_Role" });//2
+            comboBox1.Items.Add(new { Text = "Xoá object", Value = "Drop_Object" });//3
+            comboBox1.Items.Add(new { Text = "Hiệu chỉnh role", Value = "Adjust_Role" });//4
+            comboBox1.Items.Add(new { Text = "Cấp phát quyền", Value = "Assign_privilege" });//5
 
             // add item for privilege info combobox
             comboBox3.Items.Add(new { Text = "Xem quyền sys", Value = "sys_info" });//0
             comboBox3.Items.Add(new { Text = "Xem quyền trên table", Value = "tab_info" });//1
             comboBox3.Items.Add(new { Text = "Xem quyền trên cột", Value = "col_info" });//2
+            comboBox3.Items.Add(new { Text = "Xem các role của user", Value = "user_granted_roles" });
             // set default index to comboBox3
             comboBox3.SelectedIndex = 0;
 
@@ -66,7 +69,7 @@ namespace ATBM_DOAN01
             FormClosing += Interface_FormClosing;
 
         }
-        
+
         // closing event on winform
         private void Interface_FormClosing(object? sender, FormClosingEventArgs e)
         {
@@ -84,13 +87,21 @@ namespace ATBM_DOAN01
         {
             if (comboBox2.SelectedIndex == 0) //roles
             {
-                getUserRole("select role from dba_roles where common = 'NO'");
+                getDBObject("select role from dba_roles where common = 'NO'");
             }
             else if (comboBox2.SelectedIndex == 1) // users
             {
-                getUserRole("SELECT username FROM dba_users " +
+                getDBObject("SELECT username FROM dba_users " +
                     "where oracle_maintained = 'N' and username not like 'ADMIN%'");
-            }            
+            }
+            else if (comboBox2.SelectedIndex == 2) // table
+            {
+                getDBObject("select TABLE_NAME from user_tables");
+            }
+            else if (comboBox2.SelectedIndex == 3) //views
+            {
+                getDBObject("select view_name from user_views");
+            }
         }
 
         //update button handle
@@ -176,71 +187,74 @@ namespace ATBM_DOAN01
                             }
 
                         }
-                    }    
-                }    
-                
+                    }
+                }
+
                 refresh();
             }
-           
 
-            
+
+
         }
 
         //select index change
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-             //throw new NotImplementedException();
+            //throw new NotImplementedException();
             if (comboBox1.SelectedIndex == 0)
             {
                 comboBox3.Show();
             }
 
-
-
             // please add comboBox3.Hide() in other if conditions xD
-            
+
+            // view table info, must select Tables value on left comboBox          
+
+
             //throw new NotImplementedException();
             // create new user
-            
-           else if(comboBox1.SelectedIndex == 1 && comboBox2.SelectedIndex==1)
+            else if (comboBox1.SelectedIndex == 2 && comboBox2.SelectedIndex == 1)
             {
-<<<<<<< Updated upstream
-=======
-                
->>>>>>> Stashed changes
+
+
+
+
+
                 openAddNewUserForm(true);
             }
-           else if (comboBox1.SelectedIndex == 1 && comboBox2.SelectedIndex == 0)
+            // create new role
+            else if (comboBox1.SelectedIndex == 2 && comboBox2.SelectedIndex == 0)
             {
-<<<<<<< Updated upstream
+
                 openAddNewUserForm(false);
             }
-=======
-               
-                openAddNewUserForm(false);
-            }
-           
-            
 
 
->>>>>>> Stashed changes
+
+
+
+
+
+
+
+
             else
+
             {
                 comboBox3.Hide();
             }
+
         }
         private void openAddNewUserForm(bool checkUser_Role)
         {
             this.Hide();
             AddNewUserRole itf = new AddNewUserRole(this, con, checkUser_Role);
             itf.Show();
-
-
         }
 
         // method to handle select user/roles combobox
         // populate list box
-        private void getUserRole(string query)
+        private void getDBObject(string query)
         {
             // clear the listbox first to prevent stacking item
             listBox1.Items.Clear();
@@ -267,74 +281,133 @@ namespace ATBM_DOAN01
         {
             // function is view privilege info
             if (comboBox1.SelectedIndex == 0)
-            {                
-                if (comboBox2.SelectedIndex== 1) // is selecting to view user
-                {
-                    // this is where we select each privs table according to end user selection on comboBox3
-                    if (comboBox3.SelectedIndex== 0) // view sys privs info
-                    {
-                        string query = "select privilege from dba_sys_privs " +
-                            "where grantee = upper('" + listBox1.SelectedItem.ToString() +"')";
-                        getUserRolePrivsInfo(query, true);
-                    }
-                    if (comboBox3.SelectedIndex== 1) // view table privs
-                    {
-                        string query = "select privilege, table_name, grantor, grantable from dba_tab_privs " +
-                            "where grantee = upper('" + listBox1.SelectedItem.ToString() + "')";
-                        getUserRolePrivsInfo(query, true);
-                    }
-                    if (comboBox3.SelectedIndex == 2) // view col privs
-                    {
-                        string query = "select privilege, table_name,column_name,grantor,grantable from dba_col_privs " +
-                            "where grantee = upper('" + listBox1.SelectedItem.ToString() + "')";
-                        getUserRolePrivsInfo(query, true);
-                    }
-                }
-
-                else if (comboBox2.SelectedIndex==0)// is selecting to view role
+            {
+                if (comboBox2.SelectedIndex == 1) // is selecting to view user
                 {
                     // this is where we select each privs table according to end user selection on comboBox3
                     if (comboBox3.SelectedIndex == 0) // view sys privs info
                     {
                         string query = "select privilege from dba_sys_privs " +
                             "where grantee = upper('" + listBox1.SelectedItem.ToString() + "')";
-                        getUserRolePrivsInfo(query, true);
+                        getResultByQuery(query);
+                    }
+                    if (comboBox3.SelectedIndex == 1) // view table privs
+                    {
+                        string query = "select privilege, table_name, grantor, grantable from dba_tab_privs " +
+                            "where grantee = upper('" + listBox1.SelectedItem.ToString() + "')";
+                        getResultByQuery(query);
+                    }
+                    if (comboBox3.SelectedIndex == 2) // view col privs
+                    {
+                        string query = "select privilege, table_name,column_name,grantor,grantable from dba_col_privs " +
+                            "where grantee = upper('" + listBox1.SelectedItem.ToString() + "')";
+                        getResultByQuery(query);
+                    }
+                    if (comboBox3.SelectedIndex == 3) // view which roles granted to user
+                    {
+                        string query = "select granted_role from dba_role_privs where grantee = upper('" +
+                            listBox1.SelectedItem.ToString() + "')";
+                        getResultByQuery(query);
+                    }
+                }
+
+                else if (comboBox2.SelectedIndex == 0)// is selecting to view role
+                {
+                    // this is where we select each privs table according to end user selection on comboBox3
+                    if (comboBox3.SelectedIndex == 0) // view sys privs info
+                    {
+                        string query = "select privilege from dba_sys_privs " +
+                            "where grantee = upper('" + listBox1.SelectedItem.ToString() + "')";
+                        getResultByQuery(query);
                     }
                     if (comboBox3.SelectedIndex == 1) // view table privs
                     {
                         string query = "select privilege, table_name, grantable from role_tab_privs " +
                             "where role = upper('" + listBox1.SelectedItem.ToString() + "')";
-                        getUserRolePrivsInfo(query, true);
+                        getResultByQuery(query);
                     }
                     if (comboBox3.SelectedIndex == 2) // view col privs
                     {
                         string query = "select privilege, table_name,column_name,grantor from dba_col_privs " +
                             "where grantee = upper('" + listBox1.SelectedItem.ToString() + "')";
-                        getUserRolePrivsInfo(query, true);
+                        getResultByQuery(query);
                     }
+                }
+            }
+
+            // double click on table name to view its infomation
+            else if (comboBox1.SelectedIndex == 1 && comboBox2.SelectedIndex == 2)
+            {
+                getResultByQuery("select * from " + listBox1.SelectedItem.ToString());
+            }
+
+            // selecting drop object function in comboBox
+            else if (comboBox1.SelectedIndex == 3)
+            {
+                // droppping role
+                if (comboBox2.SelectedIndex == 0)
+                {
+                    dropSchema("drop role " + listBox1.SelectedItem.ToString());
+                }
+                //dropping user
+                else if (comboBox2.SelectedIndex == 1)
+                {
+                    dropSchema("drop user " + listBox1.SelectedItem.ToString());
+                }
+            }
+
+
+            // adjust role
+            else if (comboBox2.SelectedIndex == 0 && comboBox1.SelectedIndex == 4)
+            {
+                comboBox3.Hide();
+                this.Hide();
+                // for adjust role
+                AddNewUserRole adjustRole = new AddNewUserRole(this, con, listBox1.SelectedItem.ToString());
+                adjustRole.Show();
+            }
+
+            // granting privilege function
+            else if (comboBox1.SelectedIndex == 5)
+            {
+
+                Hide();
+                // granting on role
+                if (comboBox2.SelectedIndex == 0)
+                {
+                    Assign assign = new Assign(this, con, listBox1.SelectedItem.ToString(), false);
+                    assign.Show();
+
+                }
+                // granting on user
+                else if (comboBox2.SelectedIndex == 1)
+                {
+                    Assign assign = new Assign(this, con, listBox1.SelectedItem.ToString(), true);
+                    assign.Show();
+
                 }
             }
         }
 
         //function to get privileges info from oracle
-        private void getUserRolePrivsInfo(string query, bool isGetUser)
+        private void getResultByQuery(string query)
         {
-            
+
             // clear the table first
             try
             {
                 data.Clear();
-<<<<<<< Updated upstream
-                dataGridView2.Refresh();    
-=======
+
+                dataGridView2.Refresh();
+
                 if (comboBox1.SelectedIndex == 0 && (comboBox2.SelectedIndex == 1 || comboBox2.SelectedIndex == 0))
                 {
                     dataGridView2.Columns.RemoveAt(dataGridView2.Columns.Count - 1);
                 }
-                    
+
                 dataGridView2.Refresh();
-               
->>>>>>> Stashed changes
+
+
             }
             catch
             {
@@ -347,8 +420,8 @@ namespace ATBM_DOAN01
                 OracleCommand command = new OracleCommand(query, con);
                 OracleDataReader oraReader = command.ExecuteReader();
                 // bind return select result to DataTable
-                data = new DataTable();               
-                
+                data = new DataTable();
+
                 data.Load(oraReader);
                 // bind data to table aka datagridview        
                 dataGridView2.DataSource = data;
@@ -365,7 +438,7 @@ namespace ATBM_DOAN01
                     DataGridViewCheckBoxColumn dgvCmb = new DataGridViewCheckBoxColumn();
                     dgvCmb.ValueType = typeof(bool);
                     dgvCmb.Name = "Chk";
-                    dgvCmb.HeaderText = "GRANTED";                 
+                    dgvCmb.HeaderText = "GRANTED";
                     dataGridView2.Columns.Add(dgvCmb);
                     //data.Columns.Add("GRANTED", typeof(bool));
                     int count = dataGridView2.Rows.Count;
@@ -379,14 +452,14 @@ namespace ATBM_DOAN01
                     dataGridView2.ReadOnly = false;
                     for (int i = 2; i < count2 - 1; i++)
                     {
-                        
-                      
-                         dataGridView2.Columns[i].ReadOnly = true; 
-                        
+
+
+                        dataGridView2.Columns[i].ReadOnly = true;
+
                     }
-                   
-                }    
-                
+
+                }
+
 
             }
             catch
@@ -395,9 +468,8 @@ namespace ATBM_DOAN01
             }
         }
 
-<<<<<<< Updated upstream
-=======
-       
+
+
         private void dataGridView2_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
             // Exit this event procedure if no rows have been added to the DataGridView yet (during program initialization)
@@ -418,7 +490,7 @@ namespace ATBM_DOAN01
                         dataGridView2.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = dataValue[e.RowIndex, e.ColumnIndex];
                         return;
                     }
-                    
+
                 }
             }
         }
@@ -674,20 +746,20 @@ namespace ATBM_DOAN01
                         }
                     }
                 }
-            }    
-            
-            
+            }
+
+
 
         }
         // function to drop user or role
         private void dropSchema(string query)
         {
-            
+
             OracleCommand oracleCommand = new OracleCommand(query, con);
             try
-            { 
+            {
                 oracleCommand.ExecuteNonQuery();
-                MessageBox.Show("Drop successfully!!!","Alert");
+                MessageBox.Show("Drop successfully!!!", "Alert");
                 listBox1.Items.RemoveAt(listBox1.SelectedIndex);
             }
             catch
@@ -695,8 +767,11 @@ namespace ATBM_DOAN01
                 MessageBox.Show("Drop failed!!!", "Alert");
             }
         }
->>>>>>> Stashed changes
-    }
 
-    
+
+
+
+        
+    }
 }
+
