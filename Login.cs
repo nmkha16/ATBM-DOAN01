@@ -30,7 +30,13 @@ namespace ATBM_DOAN01
             OracleConnectionStringBuilder ocsb = new OracleConnectionStringBuilder();
 
             ocsb.UserID = textBox1.Text;
+<<<<<<< Updated upstream
             ocsb.Password = textBox2.Text;
+=======
+            //ocsb.Password = textBox2.Text;
+            ocsb.Password = Hash.getHashSha256(textBox2.Text+textBox1.Text).Substring(0,30); // get 30 bytes since oracle password identifier
+            // only allows 30 bytes
+>>>>>>> Stashed changes
             ocsb.DataSource = "localhost:1521/QuanLiS";
 
             // connect
