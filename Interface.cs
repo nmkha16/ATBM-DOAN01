@@ -279,6 +279,8 @@ namespace ATBM_DOAN01
         // handle list of user\role listbox
         private void listBox1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
+            if (comboBox2.SelectedIndex != 2 && comboBox2.SelectedIndex != 3)
+            { 
             // function is view privilege info
             if (comboBox1.SelectedIndex == 0)
             {
@@ -387,6 +389,7 @@ namespace ATBM_DOAN01
 
                 }
             }
+        }
         }
 
         //function to get privileges info from oracle

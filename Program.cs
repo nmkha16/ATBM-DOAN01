@@ -42,7 +42,7 @@ namespace ATBM_DOAN01
     {
         public static bool hasSpecialCharacter(string input)
         {
-            return !Regex.IsMatch(input, "^[a-zA-Z0-9]*$");
+            return !Regex.IsMatch(input, "^[a-zA-Z0-9_]*$");
         }
     }
 }
