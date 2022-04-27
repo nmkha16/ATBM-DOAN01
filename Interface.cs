@@ -20,6 +20,10 @@ namespace ATBM_DOAN01
         public Interface(Login login, OracleConnection con)
         {
             InitializeComponent();
+            // sort list box
+            listBox1.Sorted = true;
+
+
             //stretch last columnn
 
             comboBox3.Hide();

@@ -10,8 +10,8 @@ namespace ATBM_DOAN01
             InitializeComponent();
 
             //fast debug hack :))
-            textBox1.Text = "admin11";
-            textBox2.Text = "nhom11";
+            //textBox1.Text = "admin11";
+            //textBox2.Text = "nhom11";
 
             FormClosing += Login_FormClosing;
         }
@@ -40,7 +40,7 @@ namespace ATBM_DOAN01
             
 
             ocsb.UserID = textBox1.Text;
-            ocsb.Password = textBox2.Text+textBox1.Text; // get 30 bytes since oracle password identifier
+            ocsb.Password = textBox2.Text; // get 30 bytes since oracle password identifier
                                                                              // only allows 30 bytes
 
             ocsb.DataSource = "localhost:1521/QuanLiS";
@@ -52,15 +52,15 @@ namespace ATBM_DOAN01
                 con.Open();
                 MessageBox.Show("Connection established (" + con.ServerVersion + ")", "Connection");
                 // open admin interface
-                if (textBox1.Text.ToLower() == "admin")
+                if (textBox1.Text.ToLower() == "admin11")
                 {
-                    openInterface();
+                    openInterface(0);
                 }
 
                 // user specifically for patient
-                if (textBox1.Text.ToLower().Substring(0,2) == "BN")
+                if (textBox1.Text.ToUpper().Substring(0,2) == "BN")
                 {
-
+                    openInterface(1);
                 }
             }
             catch (Exception)
@@ -79,11 +79,25 @@ namespace ATBM_DOAN01
             login();
         }
 
-        //open interface form for admin
-        private void openInterface(){
+        //open interface form
+        private void openInterface(int k){
             this.Hide();
-            Interface itf = new Interface(this, con);
-            itf.Show();
+            switch (k)
+            {
+                case 0:     // open admin's interface
+                    {
+                        Interface itf = new Interface(this, con);
+                        itf.Show();
+                        break;
+                    }
+                case 1:     // open patience's interface
+                    {
+                        InterfacePT itfPT = new InterfacePT(this,textBox1.Text, con);
+                        itfPT.Show();
+                        break;
+                    }
+            }
+            
         }
     }
 }
