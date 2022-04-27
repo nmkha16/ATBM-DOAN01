@@ -30,8 +30,8 @@
         {
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -55,6 +55,16 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Chức năng";
             // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(161, 42);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(109, 53);
+            this.button2.TabIndex = 2;
+            this.button2.Text = "Xem hồ sơ bệnh án";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
             // button1
             // 
             this.button1.Location = new System.Drawing.Point(23, 42);
@@ -65,23 +75,14 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(161, 42);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(109, 53);
-            this.button2.TabIndex = 2;
-            this.button2.Text = "Xem hồ sơ bệnh án";
-            this.button2.UseVisualStyleBackColor = true;
-            // 
-            // InterfaceBN
+            // InterfacePT
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(358, 195);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.label1);
-            this.Name = "InterfaceBN";
+            this.Name = "InterfacePT";
             this.Text = "InterfaceBN";
             this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);

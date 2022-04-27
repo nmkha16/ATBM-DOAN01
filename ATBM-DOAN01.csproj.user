@@ -4,6 +4,9 @@
     <Compile Update="Assign.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="HoSoBN.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="InfoPT.cs">
       <SubType>Form</SubType>
     </Compile>
