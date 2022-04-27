@@ -40,14 +40,8 @@ namespace ATBM_DOAN01
             
 
             ocsb.UserID = textBox1.Text;
-            ocsb.Password = Hash.getHashSha256(textBox2.Text+textBox1.Text).Substring(0,30); // get 30 bytes since oracle password identifier
+            ocsb.Password = textBox2.Text+textBox1.Text; // get 30 bytes since oracle password identifier
                                                                              // only allows 30 bytes
-
-            ocsb.Password = textBox2.Text;
-
-            //ocsb.Password = textBox2.Text;
-            ocsb.Password = Hash.getHashSha256(textBox2.Text+textBox1.Text).Substring(0,30); // get 30 bytes since oracle password identifier
-            // only allows 30 bytes
 
             ocsb.DataSource = "localhost:1521/QuanLiS";
 
@@ -57,9 +51,19 @@ namespace ATBM_DOAN01
             {
                 con.Open();
                 MessageBox.Show("Connection established (" + con.ServerVersion + ")", "Connection");
-                openInterface();
+                // open admin interface
+                if (textBox1.Text.ToLower() == "admin")
+                {
+                    openInterface();
+                }
+
+                // user specifically for patient
+                if (textBox1.Text.ToLower().Substring(0,2) == "BN")
+                {
+
+                }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // show original oracle's error
                 //MessageBox.Show(ex.Message, "Oracle Connection");
@@ -75,7 +79,7 @@ namespace ATBM_DOAN01
             login();
         }
 
-        //open interface form
+        //open interface form for admin
         private void openInterface(){
             this.Hide();
             Interface itf = new Interface(this, con);

@@ -71,7 +71,7 @@ namespace ATBM_DOAN01
             if(checkUser_Role)// true mean end user is creating user
             {
                 query = "create user " + textBox1.Text + " identified by " + 
-                    Hash.getHashSha256(textBox2.Text + textBox1.Text).Substring(0, 30);
+                    textBox2.Text + textBox1.Text;
                 OracleCommand oracleCommand = new OracleCommand(query,con);
                 try
                 {
