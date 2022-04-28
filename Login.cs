@@ -1,10 +1,11 @@
-using Oracle.ManagedDataAccess.Client;
+﻿using Oracle.ManagedDataAccess.Client;
 using static ATBM_DOAN01.Program;
 namespace ATBM_DOAN01
 {
     public partial class Login : Form
     {
         private OracleConnection? con = null;
+        private string _userID;
         public Login()
         {
             InitializeComponent();
@@ -40,6 +41,7 @@ namespace ATBM_DOAN01
             
 
             ocsb.UserID = textBox1.Text;
+            _userID = ocsb.UserID;
             ocsb.Password = textBox2.Text; // get 30 bytes since oracle password identifier
                                                                              // only allows 30 bytes
 
@@ -62,6 +64,13 @@ namespace ATBM_DOAN01
                 {
                     openInterface(1);
                 }
+
+                string employeeRole = getEmployeeRole();
+                if (employeeRole == "CSYT")
+                {
+                    //
+                }
+
             }
             catch (Exception)
             {
@@ -96,8 +105,29 @@ namespace ATBM_DOAN01
                         itfPT.Show();
                         break;
                     }
+            }           
+        }
+        /// <summary>
+        /// query để xem vai trò của nhân viên là gì để mở interface phù hợp
+        /// </summary>
+        private string getEmployeeRole()
+        {
+            string query = "select vaitro from admin11.nhanvien where manv = '" + _userID.ToUpper() + "'";
+
+            OracleCommand comm = new OracleCommand(query, con);
+            OracleDataReader reader = comm.ExecuteReader();
+            if (reader.HasRows)
+            {
+                if (reader.Read())
+                {
+                    string role = reader.GetString(0);
+
+                    if (role == "CSYT") return "CSYT";
+
+
+                }
             }
-            
+            return "";
         }
     }
 }
