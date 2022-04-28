@@ -1,17 +1,18 @@
-using Oracle.ManagedDataAccess.Client;
+﻿using Oracle.ManagedDataAccess.Client;
 using static ATBM_DOAN01.Program;
 namespace ATBM_DOAN01
 {
     public partial class Login : Form
     {
         private OracleConnection? con = null;
+        private string _userID;
         public Login()
         {
             InitializeComponent();
 
             //fast debug hack :))
-            textBox1.Text = "admin11";
-            textBox2.Text = "nhom11";
+            //textBox1.Text = "admin11";
+            //textBox2.Text = "nhom11";
 
             FormClosing += Login_FormClosing;
         }
@@ -40,14 +41,9 @@ namespace ATBM_DOAN01
             
 
             ocsb.UserID = textBox1.Text;
-            ocsb.Password = Hash.getHashSha256(textBox2.Text+textBox1.Text).Substring(0,30); // get 30 bytes since oracle password identifier
+            _userID = ocsb.UserID;
+            ocsb.Password = textBox2.Text; // get 30 bytes since oracle password identifier
                                                                              // only allows 30 bytes
-
-            ocsb.Password = textBox2.Text;
-
-            //ocsb.Password = textBox2.Text;
-            ocsb.Password = Hash.getHashSha256(textBox2.Text+textBox1.Text).Substring(0,30); // get 30 bytes since oracle password identifier
-            // only allows 30 bytes
 
             ocsb.DataSource = "localhost:1521/QuanLiS";
 
@@ -57,9 +53,26 @@ namespace ATBM_DOAN01
             {
                 con.Open();
                 MessageBox.Show("Connection established (" + con.ServerVersion + ")", "Connection");
-                openInterface();
+                // open admin interface
+                if (textBox1.Text.ToLower() == "admin11")
+                {
+                    openInterface(0);
+                }
+
+                // user specifically for patient
+                if (textBox1.Text.ToUpper().Substring(0,2) == "BN")
+                {
+                    openInterface(1);
+                }
+
+                string employeeRole = getEmployeeRole();
+                if (employeeRole == "CSYT")
+                {
+                    //
+                }
+
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // show original oracle's error
                 //MessageBox.Show(ex.Message, "Oracle Connection");
@@ -76,10 +89,45 @@ namespace ATBM_DOAN01
         }
 
         //open interface form
-        private void openInterface(){
+        private void openInterface(int k){
             this.Hide();
-            Interface itf = new Interface(this, con);
-            itf.Show();
+            switch (k)
+            {
+                case 0:     // open admin's interface
+                    {
+                        Interface itf = new Interface(this, con);
+                        itf.Show();
+                        break;
+                    }
+                case 1:     // open patience's interface
+                    {
+                        InterfacePT itfPT = new InterfacePT(this,textBox1.Text, con);
+                        itfPT.Show();
+                        break;
+                    }
+            }           
+        }
+        /// <summary>
+        /// query để xem vai trò của nhân viên là gì để mở interface phù hợp
+        /// </summary>
+        private string getEmployeeRole()
+        {
+            string query = "select vaitro from admin11.nhanvien where manv = '" + _userID.ToUpper() + "'";
+
+            OracleCommand comm = new OracleCommand(query, con);
+            OracleDataReader reader = comm.ExecuteReader();
+            if (reader.HasRows)
+            {
+                if (reader.Read())
+                {
+                    string role = reader.GetString(0);
+
+                    if (role == "CSYT") return "CSYT";
+
+
+                }
+            }
+            return "";
         }
     }
 }
