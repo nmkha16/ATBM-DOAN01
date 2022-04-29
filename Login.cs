@@ -74,7 +74,12 @@ namespace ATBM_DOAN01
                 {
                     //NV376
                     openInterface(3);
-                }    
+                }
+                else if (employeeRole == "NC")
+                {
+                    
+                    openInterface(4);
+                }
 
             }
             catch (Exception)
@@ -117,8 +122,14 @@ namespace ATBM_DOAN01
                     }
                 case 3:     // open Thanh tra's interface
                     {
-                        InterfaceTT itfTT = new InterfaceTT(this, con);
-                        itfTT.Show();
+                        InterfaceTT0 itfTT0 = new InterfaceTT0(this, con);
+                        itfTT0.Show();
+                        break;
+                    }
+                case 4:     // open Nghien cuu's interface
+                    {
+                        InterfaceNC itfNC = new InterfaceNC(this, con);
+                        itfNC.Show();
                         break;
                     }
             }           

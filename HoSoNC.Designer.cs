@@ -1,6 +1,6 @@
 ﻿namespace ATBM_DOAN01
 {
-    partial class InterfaceTT
+    partial class HoSoNC
     {
         /// <summary>
         /// Required designer variable.
@@ -28,37 +28,37 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.dataTT = new System.Windows.Forms.DataGridView();
-            this.comboBoxTT = new System.Windows.Forms.ComboBox();
+            this.dataNC = new System.Windows.Forms.DataGridView();
+            this.comboBoxNC = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.dataTT)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataNC)).BeginInit();
             this.SuspendLayout();
             // 
-            // dataTT
+            // dataNC
             // 
-            this.dataTT.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataTT.Location = new System.Drawing.Point(12, 113);
-            this.dataTT.Name = "dataTT";
-            this.dataTT.RowHeadersWidth = 51;
-            this.dataTT.RowTemplate.Height = 29;
-            this.dataTT.Size = new System.Drawing.Size(1091, 469);
-            this.dataTT.TabIndex = 0;
+            this.dataNC.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataNC.Location = new System.Drawing.Point(12, 116);
+            this.dataNC.Name = "dataNC";
+            this.dataNC.RowHeadersWidth = 51;
+            this.dataNC.RowTemplate.Height = 29;
+            this.dataNC.Size = new System.Drawing.Size(776, 322);
+            this.dataNC.TabIndex = 0;
             // 
-            // comboBoxTT
+            // comboBoxNC
             // 
-            this.comboBoxTT.FormattingEnabled = true;
-            this.comboBoxTT.Location = new System.Drawing.Point(450, 50);
-            this.comboBoxTT.Name = "comboBoxTT";
-            this.comboBoxTT.Size = new System.Drawing.Size(151, 28);
-            this.comboBoxTT.TabIndex = 1;
-            this.comboBoxTT.SelectedIndexChanged += new System.EventHandler(this.comboBoxTT_SelectedIndexChanged);
+            this.comboBoxNC.FormattingEnabled = true;
+            this.comboBoxNC.Location = new System.Drawing.Point(176, 50);
+            this.comboBoxNC.Name = "comboBoxNC";
+            this.comboBoxNC.Size = new System.Drawing.Size(151, 28);
+            this.comboBoxNC.TabIndex = 1;
+            this.comboBoxNC.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Segoe UI", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label1.Location = new System.Drawing.Point(255, 39);
+            this.label1.Location = new System.Drawing.Point(12, 39);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(158, 38);
             this.label1.TabIndex = 2;
@@ -66,27 +66,27 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(702, 50);
+            this.button1.Location = new System.Drawing.Point(633, 50);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(110, 29);
+            this.button1.Size = new System.Drawing.Size(94, 29);
             this.button1.TabIndex = 3;
             this.button1.Text = "Refresh";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // InterfaceTT
+            // HoSoNC
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1115, 606);
+            this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.comboBoxTT);
-            this.Controls.Add(this.dataTT);
-            this.Name = "InterfaceTT";
-            this.Text = "Xem dữ liệu";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.InterfaceTT_FormClosing);
-            ((System.ComponentModel.ISupportInitialize)(this.dataTT)).EndInit();
+            this.Controls.Add(this.comboBoxNC);
+            this.Controls.Add(this.dataNC);
+            this.Name = "HoSoNC";
+            this.Text = "HoSoNC";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.HoSoNC_FormClosing);
+            ((System.ComponentModel.ISupportInitialize)(this.dataNC)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -94,8 +94,8 @@
 
         #endregion
 
-        private DataGridView dataTT;
-        private ComboBox comboBoxTT;
+        private DataGridView dataNC;
+        private ComboBox comboBoxNC;
         private Label label1;
         private Button button1;
     }
