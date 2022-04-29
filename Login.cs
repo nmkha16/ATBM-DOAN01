@@ -70,6 +70,11 @@ namespace ATBM_DOAN01
                 {
                     //
                 }
+                else if (employeeRole == "TT")
+                {
+                    //NV376
+                    openInterface(3);
+                }    
 
             }
             catch (Exception)
@@ -105,6 +110,17 @@ namespace ATBM_DOAN01
                         itfPT.Show();
                         break;
                     }
+                case 2:     // open CSYT's interface
+                    {
+                        
+                        break;
+                    }
+                case 3:     // open Thanh tra's interface
+                    {
+                        InterfaceTT itfTT = new InterfaceTT(this, con);
+                        itfTT.Show();
+                        break;
+                    }
             }           
         }
         /// <summary>
@@ -112,7 +128,7 @@ namespace ATBM_DOAN01
         /// </summary>
         private string getEmployeeRole()
         {
-            string query = "select vaitro from admin11.nhanvien where manv = '" + _userID.ToUpper() + "'";
+            string query = "select vaitro from admin11.TC6_NHANVIEN";
 
             OracleCommand comm = new OracleCommand(query, con);
             OracleDataReader reader = comm.ExecuteReader();
@@ -122,7 +138,11 @@ namespace ATBM_DOAN01
                 {
                     string role = reader.GetString(0);
 
-                    if (role == "CSYT") return "CSYT";
+                    if (role == "CSYT") { return "CSYT"; }
+                    else if (role == "Thanh tra") { return "TT"; }
+                    else if (role == "Y bác sĩ") { return "YBS"; }
+                    else if (role == "Nghiên cứu") { return "NC"; }
+
 
 
                 }
