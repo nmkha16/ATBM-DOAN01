@@ -16,6 +16,9 @@
     <Compile Update="InterfacePT.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="InterfaceTT.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Login.cs">
       <SubType>Form</SubType>
     </Compile>
