@@ -7,16 +7,25 @@
     <Compile Update="HoSoBN.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="HoSoNC.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="InfoPT.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Interface.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="InterfaceNC.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="InterfacePT.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="InterfaceTT.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="InterfaceTT0.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Login.cs">
