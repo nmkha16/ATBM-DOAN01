@@ -42,8 +42,7 @@ namespace ATBM_DOAN01
 
             ocsb.UserID = textBox1.Text;
             _userID = ocsb.UserID;
-            ocsb.Password = textBox2.Text; // get 30 bytes since oracle password identifier
-                                                                             // only allows 30 bytes
+            ocsb.Password = textBox2.Text; 
 
             ocsb.DataSource = "localhost:1521/QuanLiS";
 
@@ -57,18 +56,21 @@ namespace ATBM_DOAN01
                 if (textBox1.Text.ToLower() == "admin11")
                 {
                     openInterface(0);
+                    return;
                 }
 
                 // user specifically for patient
                 if (textBox1.Text.ToUpper().Substring(0,2) == "BN")
                 {
                     openInterface(1);
+                    return;
                 }
 
                 string employeeRole = getEmployeeRole();
                 if (employeeRole == "CSYT")
                 {
                     //
+                    openInterface(2);
                 }
                 else if (employeeRole == "TT")
                 {
@@ -80,7 +82,11 @@ namespace ATBM_DOAN01
                     
                     openInterface(4);
                 }
-
+                else
+                {
+                    // nghiên cứu dùng chung interface với y bác sĩ
+                    openInterface(4);
+                }
             }
             catch (Exception)
             {
@@ -111,13 +117,14 @@ namespace ATBM_DOAN01
                     }
                 case 1:     // open patience's interface
                     {
-                        InterfacePT itfPT = new InterfacePT(this,textBox1.Text, con);
+                        InterfacePT itfPT = new InterfacePT(this, con);
                         itfPT.Show();
                         break;
                     }
                 case 2:     // open CSYT's interface
                     {
-                        
+                        CSYT_HSBA cSYT_HSBA = new CSYT_HSBA(this, con);
+                        cSYT_HSBA.Show();
                         break;
                     }
                 case 3:     // open Thanh tra's interface
@@ -153,9 +160,6 @@ namespace ATBM_DOAN01
                     else if (role == "Thanh tra") { return "TT"; }
                     else if (role == "Y bác sĩ") { return "YBS"; }
                     else if (role == "Nghiên cứu") { return "NC"; }
-
-
-
                 }
             }
             return "";

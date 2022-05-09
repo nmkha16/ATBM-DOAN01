@@ -13,15 +13,14 @@ namespace ATBM_DOAN01
 {
     public partial class InterfacePT : Form
     {
-        public string _userID, _userRecordID, _userName;
+        public string _userID, _userName;
         private OracleConnection _con;
         private Login _login;
        
-        public InterfacePT(Login login, string userID, OracleConnection con)
+        public InterfacePT(Login login, OracleConnection con)
         {
             _login = login; 
             _con = con;
-            _userID = userID;
             InitializeComponent();
             FormClosing += Interface_FormClosing;
 
@@ -51,8 +50,7 @@ namespace ATBM_DOAN01
         /// </summary>
         private void getName()
         {
-            string query = "select bn.tenbn, hs.mahsba from admin11.benhnhan bn, admin11.hsba hs " +
-                "where bn.mabn = '" + _userID.ToUpper() +"' and hs.mabn = bn.mabn";
+            string query = "select tenbn from admin11.tc6_benhnhan";
 
             OracleCommand comm = new OracleCommand(query, _con);
             OracleDataReader reader = comm.ExecuteReader();
@@ -61,8 +59,6 @@ namespace ATBM_DOAN01
                 if (reader.Read())
                 {
                     label1.Text = reader.GetString(0);
-                    _userName = reader.GetString(0);
-                    _userRecordID = reader.GetString(1);
                 }
             }
         }
@@ -75,7 +71,7 @@ namespace ATBM_DOAN01
         private void button2_Click(object sender, EventArgs e)
         {
             Hide();
-            HoSoBN hoSoBN = new HoSoBN(this,_userName, _con);
+            HoSoBN hoSoBN = new HoSoBN(this, _con);
             hoSoBN.Show();
         }
     }
