@@ -14,7 +14,7 @@ namespace ATBM_DOAN01
     public partial class HoSoBN : Form
     {
         private DataTable data;
-        private InterfacePT _itfPT;
+        private InterfaceBN _itfPT;
         private InterfaceNC _itfNC;
         private OracleConnection _con;
 
@@ -26,10 +26,9 @@ namespace ATBM_DOAN01
             FormClosing += HoSoBN_FormClosing;
 
             label1.Text = _itfNC.getName(0);
-
         }
 
-        public HoSoBN(InterfacePT iftPT, OracleConnection con)
+        public HoSoBN(InterfaceBN iftPT, OracleConnection con)
         {
             _itfPT = iftPT;
             _con = con;
@@ -40,6 +39,7 @@ namespace ATBM_DOAN01
             comboBox1.Hide();
             textBox7.Hide();
             button1.Hide();
+            button2.Hide();
 
             label1.Text = getName();
 
@@ -156,6 +156,13 @@ namespace ATBM_DOAN01
             {
                 //MessageBox.Show("Error getting result!", "Alert");
             }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Hide();
+            InfoBN infoBN = new InfoBN(this,textBox1.Text,_con);
+            infoBN.Show();
         }
     }
 }

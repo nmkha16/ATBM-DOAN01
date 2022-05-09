@@ -74,5 +74,12 @@ namespace ATBM_DOAN01
         {
             return label1.Text;
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Hide();
+            InfoNV infoNV = new InfoNV(this, _con);
+            infoNV.Show();
+        }
     }
 }

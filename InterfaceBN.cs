@@ -11,13 +11,12 @@ using System.Windows.Forms;
 
 namespace ATBM_DOAN01
 {
-    public partial class InterfacePT : Form
+    public partial class InterfaceBN : Form
     {
-        public string _userID, _userName;
         private OracleConnection _con;
         private Login _login;
        
-        public InterfacePT(Login login, OracleConnection con)
+        public InterfaceBN(Login login, OracleConnection con)
         {
             _login = login; 
             _con = con;
@@ -41,7 +40,7 @@ namespace ATBM_DOAN01
         private void button1_Click(object sender, EventArgs e)
         {
             Hide();
-            InfoPT infoPT = new InfoPT(this,_userID, _con);
+            InfoBN infoPT = new InfoBN(this, _con);
             infoPT.Show();
         }
 

@@ -117,7 +117,7 @@ namespace ATBM_DOAN01
                     }
                 case 1:     // open patience's interface
                     {
-                        InterfacePT itfPT = new InterfacePT(this, con);
+                        InterfaceBN itfPT = new InterfaceBN(this, con);
                         itfPT.Show();
                         break;
                     }

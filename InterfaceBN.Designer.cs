@@ -1,6 +1,6 @@
 ﻿namespace ATBM_DOAN01
 {
-    partial class InterfacePT
+    partial class InterfaceBN
     {
         /// <summary>
         /// Required designer variable.
