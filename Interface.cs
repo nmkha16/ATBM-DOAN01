@@ -55,6 +55,7 @@ namespace ATBM_DOAN01
             comboBox1.Items.Add(new { Text = "Xoá object", Value = "Drop_Object" });//3
             comboBox1.Items.Add(new { Text = "Hiệu chỉnh role", Value = "Adjust_Role" });//4
             comboBox1.Items.Add(new { Text = "Cấp phát quyền", Value = "Assign_privilege" });//5
+            comboBox1.Items.Add(new { Text = "Cập nhật database", Value = "Update_DB" });//6
 
             // add item for privilege info combobox
             comboBox3.Items.Add(new { Text = "Xem quyền sys", Value = "sys_info" });//0
@@ -220,27 +221,20 @@ namespace ATBM_DOAN01
             else if (comboBox1.SelectedIndex == 2 && comboBox2.SelectedIndex == 1)
             {
 
-
-
-
-
                 openAddNewUserForm(true);
             }
             // create new role
             else if (comboBox1.SelectedIndex == 2 && comboBox2.SelectedIndex == 0)
             {
-
                 openAddNewUserForm(false);
             }
 
-
-
-
-
-
-
-
-
+            else if (comboBox1.SelectedIndex == 6)
+            {
+                Hide();
+                CSYT_NV_DBA cSYT_NV_DBA = new CSYT_NV_DBA(this, con);
+                cSYT_NV_DBA.Show();
+            }
 
             else
 
