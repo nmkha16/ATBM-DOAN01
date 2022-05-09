@@ -7,6 +7,9 @@
     <Compile Update="CSYT-HSBA.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="CSYT_NV_DBA.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="HoSoBN.cs">
       <SubType>Form</SubType>
     </Compile>
