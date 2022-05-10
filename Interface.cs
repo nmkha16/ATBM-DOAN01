@@ -56,6 +56,7 @@ namespace ATBM_DOAN01
             comboBox1.Items.Add(new { Text = "Hiệu chỉnh role", Value = "Adjust_Role" });//4
             comboBox1.Items.Add(new { Text = "Cấp phát quyền", Value = "Assign_privilege" });//5
             comboBox1.Items.Add(new { Text = "Cập nhật database", Value = "Update_DB" });//6
+            comboBox1.Items.Add(new { Text = "Xem FGA audit", Value = "FGA_Audit" });//7
 
             // add item for privilege info combobox
             comboBox3.Items.Add(new { Text = "Xem quyền sys", Value = "sys_info" });//0
@@ -234,6 +235,15 @@ namespace ATBM_DOAN01
                 Hide();
                 CSYT_NV_DBA cSYT_NV_DBA = new CSYT_NV_DBA(this, con);
                 cSYT_NV_DBA.Show();
+            }
+
+            // view fga audit
+
+            else if (comboBox1.SelectedIndex == 7)
+            {
+                //string query = "select * from dba_fga_audit_trail";
+                string query = "select session_id, timestamp, db_user, object_name, sql_text, statement_type from dba_fga_audit_trail";
+                getResultByQuery(query);
             }
 
             else
