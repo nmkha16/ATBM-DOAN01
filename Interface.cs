@@ -57,6 +57,7 @@ namespace ATBM_DOAN01
             comboBox1.Items.Add(new { Text = "Cấp phát quyền", Value = "Assign_privilege" });//5
             comboBox1.Items.Add(new { Text = "Cập nhật database", Value = "Update_DB" });//6
             comboBox1.Items.Add(new { Text = "Xem FGA audit", Value = "FGA_Audit" });//7
+            comboBox1.Items.Add(new { Text = "Xem standard audit", Value = "St_Audit" });//8
 
             // add item for privilege info combobox
             comboBox3.Items.Add(new { Text = "Xem quyền sys", Value = "sys_info" });//0
@@ -243,6 +244,12 @@ namespace ATBM_DOAN01
             {
                 //string query = "select * from dba_fga_audit_trail";
                 string query = "select session_id, timestamp, db_user, object_name, sql_text, statement_type from dba_fga_audit_trail";
+                getResultByQuery(query);
+            }
+            else if (comboBox1.SelectedIndex == 8)
+            {
+                //string query = "select * from dba_fga_audit_trail";
+                string query = "select username, timestamp, obj_name, action_name, sql_text from DBA_AUDIT_TRAIL";
                 getResultByQuery(query);
             }
 
